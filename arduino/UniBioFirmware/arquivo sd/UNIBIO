@@ -1,0 +1,14 @@
+wifi_ssid:FHPH;
+wifi_password:papapa2019;
+api_host:10.0.0.180;
+api_port:8000;
+cod_central:1;
+api_key:OIKGMBy0MZ;
+tempo_envio_segundos:10;
+tempo_verificar_segundos:10;
+quant_dados_arq:10;
+calib_temp_amb:-4;
+cod_biodigestor:1;
+cod_biodigestor:2;
+cod_biodigestor:3;
+cod_biodigestor:4;

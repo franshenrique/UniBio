@@ -1,0 +1,15 @@
+pin_dht:5;
+pin_ds18b20:4;
+pin_pressao:62;
+pin_mq136:61;
+pin_mq4:60;
+pin_mhz19b_rx:66;
+pin_mhz19b_tx:67;
+
+calib_temp_biomassa:1.3;
+calib_temp_gas:-1.9;
+calib_umidade:-2;
+calib_pressao:0;
+calib_metano:9.46;
+calib_sulfidrico:38.35;
+calib_carbono:0;

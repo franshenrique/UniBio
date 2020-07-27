@@ -1,0 +1,22 @@
+Central:
+temp_ambiente:-3
+
+biodigestor 1:
+temp_biomassa:0
+metano:9.46
+sulfidrico:11.09
+
+biodigestor 2:
+temp_biomassa:-0.2
+metano:13.45
+sulfidrico:2.07
+
+biodigestor 3:
+temp_biomassa:+1.3
+metano:9.07
+sulfidrico:9.19
+
+biodigestor 4:
+temp_biomassa:-0.4
+metano:13.45
+sulfidrico:9.87
