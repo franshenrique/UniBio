@@ -1,7 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 
-#define FW_VERSION "1.0.0"
+#define FW_VERSION "1.1"
 
 
 
@@ -14,21 +14,14 @@ void setup()
 }
 void loop()
 {
-  String command;
-  String body;
-  String s_params;
-  String params[10];
-  int quant;
   if(Serial.available())
   {
-    command=Serial.readStringUntil('\n');
-    s_params=Serial.readStringUntil('\n');
-    if(s_params!="") quant=split(s_params,params);
-
+    String command=Serial.readStringUntil('\n');
+    String body=Serial.readStringUntil('\n');
     if(command=="firmware")
     {
       Serial.print(FW_VERSION);
-      Serial.print("\n");
+      Serial.print('\n');
       return;
     }
     if(command=="teste")
@@ -38,20 +31,35 @@ void loop()
     }
     if(command=="wifi_status")
     {
-      Serial.print(String(WiFi.status())+"\n");
+      Serial.print(WiFi.status());
+      Serial.print('\n');
       return;
     }
     if(command=="wifi_begin")
     {
-      WiFi.begin(params[0],params[1]);
+      char * ssid;
+      char * password;
+      ssid=strtok(body.c_str(),"\r");
+      password=strtok(NULL,"\r");
+      WiFi.begin(ssid,password);
       Serial.print("ok\n");
       return;
     }
     if(command=="http_begin")
     {
-      if(http.begin(client,params[0],params[1].toInt(),params[2]))
+      String host;
+      int port;
+      String uri;
+      bool https;
+      bool reuse;
+      host.concat(String(strtok(body.c_str(),"\n")));
+      port=String(strtok(NULL,"\n")).toInt();
+      uri.concat(String(strtok(NULL,"\n")).toInt());
+      https=String(strtok(NULL,"\n")).toInt();
+      reuse=String(strtok(NULL,"\n")).toInt();
+      if(http.begin(client,host,port,uri,https))
       {
-        http.addHeader("Content-Type","application/json");
+        http.setReuse(reuse);
         Serial.print("ok\n");
       }
       else
@@ -66,23 +74,25 @@ void loop()
     }
     if(command=="http_add_header")
     {
-      http.addHeader(params[0],params[1]);
+      String key,value;
+      key.concat(String(strtok(body.c_str(),"\r")));
+      value.concat(String(strtok(NULL,"\r")));
+      http.addHeader(key,value);
       Serial.print("ok\n");
-      return;
-    }
-    if(command=="http_set_auth")
-    {
-      if(quant==1)
-        http.setAuthorization(params[0].c_str());  
-      else
-        http.setAuthorization(params[0].c_str(),params[1].c_str());
-      Serial.print("ok\n"); 
       return;
     }
     if(command=="http_set_reuse")
     {
-      http.setReuse(params[0].toInt());
+      bool reuse=body.toInt();
+      http.setReuse(reuse);
       Serial.print("ok\n");
+      return;
+    }
+    if(command=="http_post")
+    {
+      int http_status;
+      http_status=http.POST(body);
+      Serial.print(String(http_status)+"\n");
       return;
     }
     if(command=="http_post")
