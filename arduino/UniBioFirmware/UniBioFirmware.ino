@@ -85,9 +85,9 @@ void setup()
     Serial.println(F("RTC não conectado"));
     while (1) beep(2);
   }
-  if (rtc.lostPower())
-    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-
+//  if (rtc.lostPower())
+//    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+//  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   if (!SD.begin())
   {
     Serial.println(F("SD não conectado"));
@@ -129,13 +129,14 @@ void loop()
   filter_temp_amb.filter(get_temp_ambiente());
   if (tempoCorrente - ultTempoEnvio >= configuracoes->tempo_envio_segundos * 1000)
   {
+    char data_hora[20];
+    get_data_hora(data_hora);
     for (int i = 0; i < configuracoes->quant_biodigestores; i++)
     {
       uint8_t cod_biodigestor = biodigestores[i].get_cod_biodig();
-      
       Leitura leitura = biodigestores[i].get_leitura();
       leitura.temp_ambiente = filter_temp_amb.filter(get_temp_ambiente());
-      get_data_hora(leitura.data_hora);
+      leitura.data_hora=data_hora;
       CString leitura_json;
       prep_leitura_json(leitura_json,leitura);
       Serial.println(leitura_json.c_str());

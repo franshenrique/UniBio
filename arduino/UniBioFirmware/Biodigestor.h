@@ -31,7 +31,7 @@ typedef struct{
 }Calibragem;
 
 typedef struct{
-    char data_hora[20];
+    char * data_hora;
     float temp_ambiente=0;
     float temp_biomassa=0;
     float temp_gas=0;
